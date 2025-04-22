@@ -11,7 +11,10 @@ contract LeenFactory {
     address[] public allPools;
 
     event PoolCreated(address indexed token, address pool);
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not owner");

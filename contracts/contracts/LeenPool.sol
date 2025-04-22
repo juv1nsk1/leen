@@ -13,9 +13,9 @@ contract LeenPool is Ownable, ReentrancyGuard, Pausable {
     struct Config {
         IERC20 token; // Token used as collateral
         IERC20 stablecoin; // Token borrowed (USDC/USDT)
-        uint256 interestRate; // Annual rate (e.g. 500 = 5%)
-        uint256 collateralRatio; // e.g. 150 = 150%
-        uint256 liquidationRatio; // e.g. 120 = 120%
+        uint256 interestRate; // Annual rate (500 = 5%)
+        uint256 collateralRatio; // 150 = 150%
+        uint256 liquidationRatio; //  120 = 120%
         address treasury; // Address that receives protocol fees
     }
 
@@ -106,7 +106,9 @@ contract LeenPool is Ownable, ReentrancyGuard, Pausable {
         emit Withdrawn(msg.sender, amount);
     }
 
-    function withdrawStable(uint256 amount) external cooldown onlyOwner nonReentrant {
+    function withdrawStable(
+        uint256 amount
+    ) external cooldown onlyOwner nonReentrant {
         uint256 available = config.stablecoin.balanceOf(address(this));
         require(amount <= available - totalBorrowed, "Insufficient reserves");
 
@@ -154,10 +156,13 @@ contract LeenPool is Ownable, ReentrancyGuard, Pausable {
     }
 
     modifier cooldown() {
-        require(block.timestamp >= lastWithdrawTime + 1 days, "Cooldown active");
+        require(
+            block.timestamp >= lastWithdrawTime + 1 days,
+            "Cooldown active"
+        );
         _;
         lastWithdrawTime = block.timestamp;
-}
+    }
 
     event Deposited(address indexed user, uint256 amount);
     event Borrowed(address indexed user, uint256 amount, uint256 fee);
