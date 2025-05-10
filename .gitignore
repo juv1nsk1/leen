@@ -136,3 +136,4 @@ dist
 .pnp.*
 contracts/.DS_Store
 .gitignore
+.DS_Store
